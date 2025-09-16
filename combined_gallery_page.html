@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Gallery + Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      /* Регулировка положения/размера галереи */
+      --strip-top: 26vw;     /* расстояние сверху до галереи */
+      --strip-side: 4vw;     /* отступы от краёв */
+      --strip-height: 19vw;  /* высота полосы */
+      --strip-gap: 1.2vw;    /* расстояние между картинками */
+      --thumb-radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0a0b10;
+      color: #fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+    }
+
+    /* Контейнер постера: НЕ задаём высоту!
+       Высота страницы будет равна высоте изображения .bg */
+    .page {
+      position: relative;
+      width: 100%;
+      margin: 0;
+      line-height: 0;
+    }
+
+    /* Фоновое изображение как контент: тянется на всю ширину */
+    .page img.bg {
+      display: block;
+      width: 100%;     /* бока до краёв */
+      height: auto;    /* сохраняем пропорции */
+      user-select: none;
+      pointer-events: none; /* чтобы клики/скролл уходили в галерею */
+    }
+
+    /* Горизонтальная лента поверх изображения */
+    .gallery-strip {
+      position: absolute;
+      left: var(--strip-side);
+      right: var(--strip-side);
+      top: var(--strip-top);
+      height: var(--strip-height);
+      display: flex;
+      gap: var(--strip-gap);
+      padding: 0.9vw;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      align-items: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    .gallery-strip a img {
+      height: 100%;
+      width: auto;
+      border-radius: var(--thumb-radius);
+      display: block;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+    .gallery-strip a img:hover { transform: scale(1.06); }
+
+    /* Модальное окно */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      padding: 3vw;
+    }
+    .modal:target { display: flex; }
+    .modal img {
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 12px;
+      transform: scale(2);
+      transition: transform 0.3s ease;
+    }
+    .close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.6rem;
+      font-size: 2rem;
+      color: #fff;
+      text-decoration: none;
+      opacity: .9;
+    }
+    .close:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <!-- Фоновое изображение ПО-КОНТЕНТУ (даёт высоту странице) -->
+    <img class="bg" src="сайт 4.svg" alt="Gallery page background">
+
+    <!-- Галерея поверх фона -->
+    <div class="gallery-strip" id="gallery">
+      <a href="#img2"><img src="Frame 2.svg" alt="Frame 2"></a>
+      <a href="#img4"><img src="Frame 4.svg" alt="Frame 4"></a>
+      <a href="#img6"><img src="Frame 6.svg" alt="Frame 6"></a>
+      <a href="#img8"><img src="Frame 8.svg" alt="Frame 8"></a>
+      <a href="#img10"><img src="Frame 10.svg" alt="Frame 10"></a>
+      <a href="#img12"><img src="Frame 12.svg" alt="Frame 12"></a>
+      <a href="#img14"><img src="Frame 14.svg" alt="Frame 14"></a>
+      <a href="#img16"><img src="Frame 16.svg" alt="Frame 16"></a>
+      <a href="#img18"><img src="Frame 18.svg" alt="Frame 18"></a>
+      <a href="#img20"><img src="Frame 20.svg" alt="Frame 20"></a>
+      <a href="#img22"><img src="Frame 22.svg" alt="Frame 22"></a>
+      <a href="#img24"><img src="Frame 24.svg" alt="Frame 24"></a>
+    </div>
+  </main>
+
+  <!-- Модалки -->
+  <div id="img2" class="modal"><a class="close" href="#">&times;</a><img src="Frame 2.svg" alt=""></div>
+  <div id="img4" class="modal"><a class="close" href="#">&times;</a><img src="Frame 4.svg" alt=""></div>
+  <div id="img6" class="modal"><a class="close" href="#">&times;</a><img src="Frame 6.svg" alt=""></div>
+  <div id="img8" class="modal"><a class="close" href="#">&times;</a><img src="Frame 8.svg" alt=""></div>
+  <div id="img10" class="modal"><a class="close" href="#">&times;</a><img src="Frame 10.svg" alt=""></div>
+  <div id="img12" class="modal"><a class="close" href="#">&times;</a><img src="Frame 12.svg" alt=""></div>
+  <div id="img14" class="modal"><a class="close" href="#">&times;</a><img src="Frame 14.svg" alt=""></div>
+  <div id="img16" class="modal"><a class="close" href="#">&times;</a><img src="Frame 16.svg" alt=""></div>
+  <div id="img18" class="modal"><a class="close" href="#">&times;</a><img src="Frame 18.svg" alt=""></div>
+  <div id="img20" class="modal"><a class="close" href="#">&times;</a><img src="Frame 20.svg" alt=""></div>
+  <div id="img22" class="modal"><a class="close" href="#">&times;</a><img src="Frame 22.svg" alt=""></div>
+  <div id="img24" class="modal"><a class="close" href="#">&times;</a><img src="Frame 24.svg" alt=""></div>
+
+  <script>
+    // Горизонтальная прокрутка колесиком
+    const gallery = document.getElementById('gallery');
+    gallery.addEventListener('wheel', (e) => {
+      if (e.deltaY === 0) return;
+      e.preventDefault();
+      gallery.scrollLeft += e.deltaY;
+    });
+
+    // Закрытие модалки по клику на фон
+    document.querySelectorAll('.modal').forEach(m => {
+      m.addEventListener('click', (ev) => {
+        if (ev.target === m) location.hash = '';
+      });
+    });
+  </script>
+</body>
+</html>
+
