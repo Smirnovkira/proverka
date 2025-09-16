@@ -98,6 +98,54 @@
       opacity: .9;
     }
     .close:hover { opacity: 1; }
+    /* Улучшения для тача */
+.gallery-strip{
+  touch-action: pan-x;              /* свайп по ленте только по оси X */
+  overscroll-behavior-x: contain;   /* не «дергает» всю страницу при доскролле ленты */
+}
+
+/* Если используешь верхний кастом-скролл, прячем его на мобилках */
+/* .top-scroll{display:none;} */
+
+/* ---------- Планшеты ≤ 900px ---------- */
+@media (max-width: 900px){
+  :root{
+    --strip-top: 60vw;   /* ленту ниже, чтобы не наезжала на заголовок */
+    --strip-side: 3vw;   /* немного больше поля */
+    --strip-height: 38vw;/* сами карточки выше -> удобнее тапать */
+    --strip-gap: 3vw;    /* больше зазор между карточками */
+  }
+
+  .gallery-strip{ padding: 2vw; }
+
+  /* Модалка: картинка почти на всю ширину, без лишнего увеличения */
+  .modal img{
+    max-width: 96%;
+    max-height: 82%;
+    transform: scale(1.05); /* вместо 2/1.3, чтобы не вылезала за экран */
+  }
+
+  .close{ top: 1rem; right: 1rem; font-size: 1.8rem; }
+}
+
+/* ---------- Телефоны ≤ 600px ---------- */
+@media (max-width: 600px){
+  :root{
+    --strip-top: 72vw;   /* ещё чуть ниже */
+    --strip-side: 2.5vw;
+    --strip-height: 56vw;/* карточки ещё крупнее */
+    --strip-gap: 4vw;
+  }
+
+  .gallery-strip a img{ border-radius: 8px; }  /* мягче скругление на маленьких экранах */
+
+  .modal img{
+    max-width: 96%;
+    max-height: 80%;
+    transform: none;     /* без доп. увеличения на маленьких экранах */
+  }
+}
+
   </style>
 </head>
 <body>
